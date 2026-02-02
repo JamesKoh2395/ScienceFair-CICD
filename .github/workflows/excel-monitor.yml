@@ -3,9 +3,9 @@ name: Excel File Validator
 on:
   push:
     paths:
-      - "ScienceFair.xlsx"
-      - "src/**"
-      - "pom.xml"
+      - "sciencefair-excel-validator/ScienceFair.xlsx"
+      - "sciencefair-excel-validator/src/**"
+      - "sciencefair-excel-validator/pom.xml"
       - ".github/workflows/excel-monitor.yml"
   workflow_dispatch:
 
@@ -13,13 +13,19 @@ jobs:
   validate_excel:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+    defaults:
+      run:
+        working-directory: sciencefair-excel-validator
 
-      - uses: actions/setup-java@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: '17'
+          java-version: "17"
           cache: maven
 
       - name: Build with Maven
