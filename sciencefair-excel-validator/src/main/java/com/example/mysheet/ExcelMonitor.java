@@ -1,10 +1,14 @@
 package com.example.mysheet;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelMonitor {
 
@@ -19,7 +23,9 @@ public class ExcelMonitor {
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row == null) continue;
+                if (row == null) {
+					continue;
+				}
 
                 Cell name = row.getCell(0);
                 Cell project = row.getCell(1);
@@ -75,8 +81,9 @@ public class ExcelMonitor {
     }
 
     static boolean isEmpty(Cell c) {
-        if (c == null) return true;
-        if (c.getCellType() == CellType.BLANK) return true;
+        if ((c == null) || (c.getCellType() == CellType.BLANK)) {
+			return true;
+		}
 
         if (c.getCellType() == CellType.STRING) {
             return c.getStringCellValue() == null || c.getStringCellValue().trim().isEmpty();
@@ -85,16 +92,22 @@ public class ExcelMonitor {
     }
 
     static Double getDoubleOrNull(Cell c) {
-        if (c == null) return null;
+        if (c == null) {
+			return null;
+		}
 
         switch (c.getCellType()) {
             case NUMERIC:
                 return c.getNumericCellValue();
             case STRING:
                 String s = c.getStringCellValue();
-                if (s == null) return null;
+                if (s == null) {
+					return null;
+				}
                 s = s.trim();
-                if (s.isEmpty()) return null;
+                if (s.isEmpty()) {
+					return null;
+				}
                 try {
                     return Double.parseDouble(s);
                 } catch (NumberFormatException ex) {
